@@ -20,8 +20,8 @@ Keep in mind that the add methods return the same container instance (no new ins
 
 ```TypeScript
 const container = new DIContainer();
-container.addTransient("foo", "bar");
-container.addTransient("foo", "baz");
+container.addTransient(Foo, "Foo");
+container.addTransient(Bar, "Bar");
 ```
 
 **Do this**

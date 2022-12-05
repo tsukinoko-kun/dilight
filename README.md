@@ -32,13 +32,7 @@ const container = new DIContainer()
   .addTransient(Bar, "Bar");
 ```
 
-You don't have to give the service a name, but keep in mind that your bundler might change the class names. If you don't provide a name, the class name is used as the service name.
-
-```TypeScript
-const container = new DIContainer()
-  .addTransient(Foo)
-  .addTransient(Bar);
-```
+### Interface
 
 You can also provide a different type for the service.
 

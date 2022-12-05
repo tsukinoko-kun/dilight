@@ -7,6 +7,7 @@ src/
 # Tests
 *.test.js
 *.test.ts
+coverage/
 
 # Logs
 logs

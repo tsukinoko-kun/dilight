@@ -2,6 +2,10 @@
 
 Lightweight ES5 compatible Dependency Injection Library
 
+[![](https://img.shields.io/badge/Types-included-blue?logo=typescript&style=plastic)](https://www.typescriptlang.org)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 [![Test](https://github.com/Frank-Mayer/dilight/actions/workflows/test.yml/badge.svg)](https://github.com/Frank-Mayer/dilight/actions/workflows/test.yml)
 
 ## Installation

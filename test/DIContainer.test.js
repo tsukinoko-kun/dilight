@@ -16,6 +16,22 @@ test("singleton", () => {
   expect(s1.foo).toBe("bar");
 });
 
+test("singleton from object", () => {
+  const o1 = {
+    foo: "foo",
+  };
+
+  const c = new DIContainer().addSingleton(o1, "O");
+
+  const o2 = c.resolve("O");
+
+  expect(o1.foo).toBe(o2.foo);
+
+  o1.foo = "bar";
+
+  expect(o1.foo).toBe(o2.foo);
+});
+
 test("transient", () => {
   class T {
     foo = "foo";

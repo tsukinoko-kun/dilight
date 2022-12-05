@@ -25,16 +25,22 @@ export class DIContainer<
   }
 
   public addSingleton<T extends object, K extends string = string>(
-    type: new (...args: never) => T,
+    type: (new (...args: never) => T) | T,
     as: K
   ): DIContainer<TypeMap & { [key in K]: T }> {
-    this.addFactory(() => {
-      if (!this._singletons.has(as)) {
-        this._singletons.set(as, new type());
-      }
+    if (typeof type === "function") {
+      this.addFactory(() => {
+        if (!this._singletons.has(as)) {
+          this._singletons.set(as, new type());
+        }
 
-      return this._singletons.get(as)!;
-    }, as);
+        return this._singletons.get(as)!;
+      }, as);
+    } else {
+      this._singletons.set(as, type);
+      this.addFactory(() => this._singletons.get(as), as);
+    }
+
     return this as any;
   }
 

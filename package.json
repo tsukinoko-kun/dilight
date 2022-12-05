@@ -1,6 +1,6 @@
 {
   "name": "@frank-mayer/dilight",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple dependency injection library",
   "source": "src/index.ts",
   "main": "dist/main.js",

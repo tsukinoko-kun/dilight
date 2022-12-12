@@ -26,6 +26,7 @@
     "curly": ["error", "multi-line"],
     "for-direction": "error",
     "guard-for-in": "off",
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
     "no-alert": "error",
     "no-caller": "error",
     "no-constant-binary-expression": "error",

@@ -9,9 +9,7 @@
     "jest": true
   },
   "globals": {
-    "globalThis": true,
-    "FinalizationRegistry": true,
-    "WeakRef": true
+    "globalThis": true
   },
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "unused-imports"],

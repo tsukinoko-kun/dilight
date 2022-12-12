@@ -1,18 +1,8 @@
-const disposableRegistry = new FinalizationRegistry(
-  (handle: WeakRef<Disposable>) => {
-    handle.deref().dispose()
-  }
-)
-
 export abstract class Disposable {
   private _disposed = false
 
   public get isDisposed(): boolean {
     return this._disposed
-  }
-
-  protected constructor() {
-    disposableRegistry.register(this, new WeakRef(this))
   }
 
   public dispose(): void {

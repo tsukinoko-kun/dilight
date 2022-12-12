@@ -1,27 +1,27 @@
 const disposableRegistry = new FinalizationRegistry(
   (handle: WeakRef<Disposable>) => {
-    handle.deref().dispose();
+    handle.deref().dispose()
   }
-);
+)
 
 export abstract class Disposable {
-  private _disposed = false;
+  private _disposed = false
 
   public get isDisposed(): boolean {
-    return this._disposed;
+    return this._disposed
   }
 
   protected constructor() {
-    disposableRegistry.register(this, new WeakRef(this));
+    disposableRegistry.register(this, new WeakRef(this))
   }
 
   public dispose(): void {
     if (this._disposed) {
-      return;
+      return
     }
 
-    this._disposed = true;
-    this.onDispose();
+    this._disposed = true
+    this.onDispose()
   }
 
   protected abstract onDispose(): void;
@@ -39,11 +39,11 @@ export const using: {
   callback: (disposable: T) => U
 ): U => {
   const service =
-    typeof disposable === "function" ? new disposable() : disposable;
+    typeof disposable === "function" ? new disposable() : disposable
 
   try {
-    return callback(service);
+    return callback(service)
   } finally {
-    service.dispose();
+    service.dispose()
   }
-};
+}

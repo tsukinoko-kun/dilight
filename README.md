@@ -8,6 +8,8 @@ Lightweight ES5 compatible Dependency Injection Library
 
 [![Test](https://github.com/Frank-Mayer/dilight/actions/workflows/test.yml/badge.svg)](https://github.com/Frank-Mayer/dilight/actions/workflows/test.yml)
 
+[![Lint](https://github.com/Frank-Mayer/dilight/actions/workflows/lint.yml/badge.svg)](https://github.com/Frank-Mayer/dilight/actions/workflows/lint.yml)
+
 ## Installation
 
 ```bash

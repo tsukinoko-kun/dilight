@@ -1,4 +1,4 @@
-import { Disposable } from "./Disposable";
+import { Disposable } from "./Disposable"
 
 /**
  * Dependency injection container.
@@ -7,21 +7,23 @@ import { Disposable } from "./Disposable";
  * @source https://github.com/Frank-Mayer/dilight/blob/main/src/DIContainer.ts
  */
 export class DIContainer<
+  // eslint-disable-next-line @typescript-eslint/ban-types
   TypeMap extends { [key: string]: object } = {}
 > extends Disposable {
-  protected readonly _services: Map<string, () => object> = new Map();
-  protected readonly _singletons: Map<string, object> = new Map();
+  protected readonly _services: Map<string, () => object> = new Map()
+  protected readonly _singletons: Map<string, object> = new Map()
 
   public constructor() {
-    super();
+    super()
   }
 
   public addFactory<T extends object, K extends string = string>(
     factory: () => T,
     as: K
   ): DIContainer<TypeMap & { [key in K]: T }> {
-    this._services.set(as, factory);
-    return this as any;
+    this._services.set(as, factory)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return this as any
   }
 
   public addSingleton<T extends object, K extends string = string>(
@@ -29,44 +31,46 @@ export class DIContainer<
     as: K
   ): DIContainer<TypeMap & { [key in K]: T }> {
     if (typeof type === "function") {
-      this.addFactory(() => {
+      return this.addFactory(() => {
         if (!this._singletons.has(as)) {
-          this._singletons.set(as, new type());
+          this._singletons.set(as, new type())
         }
 
-        return this._singletons.get(as)!;
-      }, as);
-    } else {
-      this._singletons.set(as, type);
-      this.addFactory(() => this._singletons.get(as), as);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this._singletons.get(as)!
+      }, as)
     }
 
-    return this as any;
+    this._singletons.set(as, type)
+    return this.addFactory(() => this._singletons.get(as), as)
   }
 
   public addTransient<T extends object, K extends string = string>(
     type: new (...args: never) => T,
     as: K
   ): DIContainer<TypeMap & { [key in K]: T }> {
-    this.addFactory(() => new type(), as);
-    return this as any;
+    return this.addFactory(() => new type(), as)
   }
 
   public resolve<K extends keyof TypeMap & string, T extends TypeMap[K]>(
     service: K
+  ): T;
+  public resolve<T extends TypeMap[keyof TypeMap]>(service: keyof TypeMap): T;
+  public resolve<K extends keyof TypeMap & string, T extends TypeMap[K]>(
+    service: K
   ): T {
-    const factory = this._services.get(service);
-    if (factory) {
-      return factory() as T;
+    const getter = this._services.get(service)
+    if (getter) {
+      return getter() as T
     }
 
-    throw new Error(`Service "${service}" not found`);
+    throw new Error(`Service "${service}" not found`)
   }
 
   // Disposable implementation
 
   protected onDispose(): void {
-    this._services.clear();
-    this._singletons.clear();
+    this._services.clear()
+    this._singletons.clear()
   }
 }

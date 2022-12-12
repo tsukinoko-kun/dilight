@@ -36,7 +36,7 @@ export class DIContainer<
                     this._singletons.set(as, new type())
                 }
 
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return this._singletons.get(as)!
             }, as)
         }
@@ -65,6 +65,31 @@ export class DIContainer<
         }
 
         throw new Error(`Service "${service}" not found`)
+    }
+
+    /**
+     * Provides a way to get a service from this container
+     * without having to use the `DIContainer` object.
+     *
+     * This is useful for passing the injector to other objects
+     * or exporting it from a module.
+     *
+     * The typemap is copied from the container itself.
+     *
+     * @example
+     * const dic = new DIContainer()
+     *  .addTransient<Logger>(ConsoleLogger, "Logger")
+     *
+     * export const inject = dic.getInjector()
+     *
+     * // somewhere else
+     * @inject("Logger")
+     * const logger = injector("Logger")
+     */
+    public getInjector() {
+        return <K extends keyof TypeMap & string, T extends TypeMap[K]>(
+            service: K
+        ): T => this.resolve(service)
     }
 
     // Disposable implementation

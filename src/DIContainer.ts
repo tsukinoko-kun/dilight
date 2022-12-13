@@ -80,13 +80,11 @@ export class DIContainer<
      *
      * @example
      * const dic = new DIContainer()
-     *  .addTransient<Logger>(ConsoleLogger, "Logger")
+     *     .addTransient<Logger>(ConsoleLogger, "Logger")
      *
-     * export const inject = dic.getInjector()
+     * const inject = dic.getInjector()
      *
-     * // somewhere else
-     * @inject("Logger")
-     * const logger = injector("Logger")
+     * const logger: Logger = inject("Logger")
      */
     public getInjector() {
         return <K extends keyof TypeMap & string, T extends TypeMap[K]>(

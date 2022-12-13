@@ -44,7 +44,21 @@ You can also provide a different type for the service.
 
 ```TypeScript
 const container = new DIContainer()
-  .addTransient<ILogger>(FileLogger, "ILogger");
+  .addTransient<Logger>(FileLogger, "Logger");
+```
+
+### Decorators
+
+```TypeScript
+const container = new DIContainer()
+  .addTransient(Foo, "Foo");
+
+const inject = makeDecorator(container);
+
+class Foo {
+  @inject("Logger")
+  private logger: Logger;
+}
 ```
 
 ## Full Example

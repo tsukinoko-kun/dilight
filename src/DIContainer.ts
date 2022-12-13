@@ -10,8 +10,8 @@ export class DIContainer<
     // eslint-disable-next-line @typescript-eslint/ban-types
     TypeMap extends { [key: string]: object } = {}
 > extends Disposable {
-    protected readonly _services: Map<string, () => object> = new Map()
-    protected readonly _singletons: Map<string, object> = new Map()
+    protected readonly _services: Map<keyof TypeMap, () => object> = new Map()
+    protected readonly _singletons: Map<keyof TypeMap, object> = new Map()
 
     public constructor() {
         super()
@@ -22,41 +22,43 @@ export class DIContainer<
         as: K
     ): DIContainer<TypeMap & { [key in K]: T }> {
         this._services.set(as, factory)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this as any
+        return this as DIContainer<TypeMap & { [key in K]: T }>
     }
 
-    public addSingleton<T extends object, K extends string = string>(
+    public addSingleton<
+        T extends object,
+        K extends string = string
+    >(
         type: (new (...args: never) => T) | T,
         as: K
     ): DIContainer<TypeMap & { [key in K]: T }> {
         if (typeof type === "function") {
-            return this.addFactory(() => {
+            this.addFactory(() => {
                 if (!this._singletons.has(as)) {
                     this._singletons.set(as, new type())
                 }
 
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return this._singletons.get(as)!
             }, as)
+
+            return this as DIContainer<TypeMap & { [key in K]: T }>
         }
 
         this._singletons.set(as, type)
-        return this.addFactory(() => this._singletons.get(as), as)
+        this.addFactory(() => this._singletons.get(as), as)
+        return this as DIContainer<TypeMap & { [key in K]: T }>
     }
 
     public addTransient<T extends object, K extends string = string>(
         type: new (...args: never) => T,
         as: K
     ): DIContainer<TypeMap & { [key in K]: T }> {
-        return this.addFactory(() => new type(), as)
+        this.addFactory(() => new type(), as)
+        return this as DIContainer<TypeMap & { [key in K]: T }>
     }
 
-    public resolve<K extends keyof TypeMap & string, T extends TypeMap[K]>(
-        service: K
-    ): T;
-    public resolve<T extends TypeMap[keyof TypeMap]>(service: keyof TypeMap): T;
-    public resolve<K extends keyof TypeMap & string, T extends TypeMap[K]>(
+    public resolve<K extends keyof TypeMap, T extends TypeMap[K]>(
         service: K
     ): T {
         const getter = this._services.get(service)
@@ -64,7 +66,7 @@ export class DIContainer<
             return getter() as T
         }
 
-        throw new Error(`Service "${service}" not found`)
+        throw new Error(`Service "${service as string}" not found`)
     }
 
     /**
